@@ -12,5 +12,17 @@ build:
     - script:
         name: Maven build
         code: mvn package -Dmaven.test.skip
+
+push:
+  box: openjdk:11-jdk
+  steps:
+    - internal/docker-push:
+        entrypoint: java -jar /pipeline/source/target/spring-boot-web-1.0.jar
+        tag: latest
+        ports: "8080"
+        username: $DOCKER_USERNAME
+        password: $DOCKER_PASSWORD
+        repository: $DOCKER_REPO
+        registry: https://ap-seoul-1.ocir.io/v2
         
 
