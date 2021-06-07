@@ -1,5 +1,5 @@
 box:
-  id: ap-seoul-1.ocir.io/cnmcstwdpgew/openjdk
+  id: ap-seoul-1.ocir.io/cnmcstwdpgew/openjdk:11-jdk
   ports:
     - 8080
 
