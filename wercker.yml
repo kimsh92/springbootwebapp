@@ -14,8 +14,8 @@ build:
         code: mvn package -Dmaven.test.skip
 
 push:
-  box: openjdk:11-jdk
   steps:
+    #
     - internal/docker-push:
         entrypoint: java -jar /pipeline/source/target/spring-boot-web-1.0.jar
         tag: latest
@@ -24,5 +24,25 @@ push:
         password: $DOCKER_PASSWORD
         repository: $DOCKER_REPO
         registry: https://ap-seoul-1.ocir.io/v2
-        
+
+deploy:
+    steps:
+    - bash-template
+    # Rollout Application
+    - kubectl:
+        name: rollout deployment
+        server: $OKE_MASTER
+        token: $OKE_TOKEN
+        insecure-skip-tls-verify: true
+        command: -n thkoke-apps rollout restart deployment/thkoke-apps
+
+status:
+    # Watch the Kubernetes deployment. Once the pods are considered healthy the step will exit 0
+    # If they aren't healthy within 60 seconds, it will exit with a non 0 exit code, and cause the run to fail.
+    - kubectl:
+        name: check deployment status
+        server: $OKE_MASTER
+        token: $OKE_TOKEN
+        insecure-skip-tls-verify: true
+        command: -n thkoke-apps rollout status deployment/thkoke-apps
 
