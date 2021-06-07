@@ -11,9 +11,9 @@ build:
         echo "------"
         du -hs ${WERCKER_CACHE_DIR}/* | sort -h  
     # Build Spring Boot application
-    - script:
-        name: Maven install
-        code: mvn package -Dmaven.test.skip
+    #- script:
+    #    name: Maven install
+    #    code: mvn package -Dmaven.test.skip
         
 push:
   steps:
