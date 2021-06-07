@@ -1,15 +1,34 @@
-box: maven:latest
+box: oraclelinux:7-slim
 build:
   steps:
+    - shellcheck
     - script:
-      name: setup maven local repo
+      name: install packages
       code: |
-        export MAVEN_OPTS="-Dmaven.repo.local=${WERCKER_CACHE_DIR}"
-        mvn -version
-        echo "------"
-        du -hs ${WERCKER_CACHE_DIR}
-        echo "------"
-        du -hs ${WERCKER_CACHE_DIR}/* | sort -h  
+          yum -y install wget tar curl gzip
+
+    - script: 
+        name: download and extract maven
+        code: |
+          wget http://mirrors.estointernet.in/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
+          tar -xvzf ~/apache-maven-3.5.4-bin.tar.gz
+
+    - script: 
+        name: copy and configure
+        code: |
+          cp -R ~/apache-maven-3.5.4 /opt/
+          export M2_HOME="/opt/apache-maven-3.5.4"
+          export PATH=$PATH:/opt/apache-maven-3.5.4/bin
+    - script: 
+        name: Update Maven Alternatives, Autocomplete
+        code: | 
+          update-alternatives --install "/usr/bin/mvn" "mvn" "/opt/apache-maven-3.5.0/bin/mvn" 0
+          update-alternatives --set mvn /opt/apache-maven-3.5.4/bin/mvn
+          wget https://raw.github.com/dimaj/maven-bash-completion/master/bash_completion.bash --output-document /etc/bash_completion.d/mvn
+    - script:
+        name: Verify Install
+        code: | 
+          mvn --version
     # Build Spring Boot application
     - script:
         name: Maven install
