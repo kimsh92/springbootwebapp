@@ -1,5 +1,5 @@
-box: openjdk:11-jdk
 build:
+  box: openjdk:11-jdk
   steps:
     - script:
       name: setup maven local repo
