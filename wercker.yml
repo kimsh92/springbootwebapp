@@ -8,9 +8,9 @@ build:
   steps:
     - install-packages:
         packages: maven
+    # Build Spring Boot application
     - script:
-        name: maven build
-        cwd: msa-apidev-mp
-        code: mvn clean package 
+        name: Maven build
+        code: mvn package -Dmaven.test.skip
         
 
