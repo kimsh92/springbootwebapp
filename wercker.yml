@@ -1,5 +1,5 @@
+box: maven:latest
 build:
-  box: openjdk:11-jdk
   steps:
     - script:
       name: setup maven local repo
@@ -10,15 +10,8 @@ build:
         du -hs ${WERCKER_CACHE_DIR}
         echo "------"
         du -hs ${WERCKER_CACHE_DIR}/* | sort -h  
+    # Build Spring Boot application
+    - script:
+        name: Maven install
+        code: mvn package -Dmaven.test.skip
 
-        
-push:
-  steps:
-    - internal/docker-push:
-        cmd: java -jar  ./target/spring-boot-web-1.0.jar
-        tag: latest
-        ports: "8080"
-        username: $DOCKER_USERNAME
-        password: $DOCKER_PASSWORD
-        repository: $DOCKER_REPO
-        registry: https://ap-seoul-1.ocir.io/v2
