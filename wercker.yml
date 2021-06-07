@@ -1,6 +1,15 @@
 box: combient/java-mvn
 build:
   steps:
+    - script:
+      name: setup maven local repo
+      code: |
+        export MAVEN_OPTS="-Dmaven.repo.local=${WERCKER_CACHE_DIR}"
+        mvn -version
+        echo "------"
+        du -hs ${WERCKER_CACHE_DIR}
+        echo "------"
+        du -hs ${WERCKER_CACHE_DIR}/* | sort -h  
     # Build Spring Boot application
     - script:
         name: Maven install
