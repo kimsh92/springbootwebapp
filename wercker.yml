@@ -23,7 +23,7 @@ build:
         repository: $DOCKER_REPO
         registry: https://ap-seoul-1.ocir.io/v2
 
-deploy:
+deploy-apps:
     steps:
     - bash-template
     # Rollout Application
@@ -34,7 +34,7 @@ deploy:
         insecure-skip-tls-verify: true
         command: -n thkoke-apps rollout restart deployment/thkoke-apps
 
-status:
+status-apps:
     # Watch the Kubernetes deployment. Once the pods are considered healthy the step will exit 0
     # If they aren't healthy within 60 seconds, it will exit with a non 0 exit code, and cause the run to fail.
     - kubectl:
