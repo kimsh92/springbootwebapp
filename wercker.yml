@@ -13,9 +13,6 @@ build:
         name: Maven build
         code: mvn package -Dmaven.test.skip
 
-push:
-  steps:
-    #
     - internal/docker-push:
         entrypoint: java -jar /pipeline/source/target/spring-boot-web-1.0.jar
         tag: latest
