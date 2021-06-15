@@ -46,8 +46,9 @@ scale-apps:
         command: -n thkoke-apps scale --replicas=3 deployment/thkoke-apps
 
 status-apps:
-    # Watch the Kubernetes deployment. Once the pods are considered healthy the step will exit 0
-    # If they aren't healthy within 60 seconds, it will exit with a non 0 exit code, and cause the run to fail.
+    steps:
+    - bash-template
+    # Status Application
     - kubectl:
         name: check deployment status
         server: $OKE_MASTER
